@@ -4,7 +4,7 @@ Created by [Jonghwan Mun*](http://cvlab.postech.ac.kr/~jonghwan/), [Paul Hongsuc
 If you use this code in a publication, please cite our paper.
 
 ```
-    @inproceeding{mun2017marioqa,
+    @inproceedings{mun2017marioqa,
        title     = {MarioQA: Answering Questions by Watching Gameplay Videos},
        author    = {Mun, Jonghwan and Seo, Paul Hongsuck and Jung, Ilchae and Han, Bohyung},
        booktitle = {ICCV},
