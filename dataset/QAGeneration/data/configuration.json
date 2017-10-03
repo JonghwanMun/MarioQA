@@ -1,8 +1,5 @@
 {
-	"numActions":11,
-	"actionList":["Kill", "Die", "Jump", "Hit", "Break", "Appear", "Shoot", "Throw", "Kick", "Hold", "Eat"],
 	"fps":22,
 	"margin":10,
-	"difficulty":"hard",
 	"durations":[3, 4, 5, 6],
 }

@@ -1,0 +1,55 @@
+###################################################################
+## Ignore files that system generates 
+###################################################################
+*~
+*.swp
+*.pyc
+*.tar.gz
+*.zip
+.~*
+
+###################################################################
+## Ignored folders
+###################################################################
+/eval.lua
+/train.lua
+/run_eval.sh
+/run_train.sh
+/gen_simulinks.sh
+
+## source codes for playing Mario game
+dataset/playingMario/src
+
+## compiled results
+dataset/QAGeneration/target
+
+## html folders
+
+## misc folders
+
+###################################################################
+## data (we get data by running shell script)
+###################################################################
+
+## pretrained models (STV, vgg)
+code/data/pretrained_models/vgg16
+code/data/pretrained_models/skipthought/paper_version
+code/data/pretrained_models/skipthought/*.npy
+code/data/pretrained_models/skipthought/*.t7
+
+## all images and data
+*.jpg
+*.png
+*.dat
+
+###################################################################
+## Ignored misc files
+###################################################################
+## ipython notebook 
+*.ipynb
+
+## generated files while learning models (torch models, log, etc)
+*.h5
+*.t7
+*.json
+*.log
