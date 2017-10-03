@@ -6,7 +6,7 @@ The Infinite Mario Bro. is originally written by Minecraft creator MarKus "Notch
 + Install JDK, JRE in [oracle](http://www.oracle.com/technetwork/pt/java/javase/downloads/index.html).
 
 ### How to run?
-1. Type and run following line.
+1. Type and run following line to play Infinite Mario Bro.
   ```
   $ bash run_mario.sh your_gameplay_id your_fps
   ``` 
@@ -17,11 +17,10 @@ The Infinite Mario Bro. is originally written by Minecraft creator MarKus "Notch
     If the speed of gamplay is too slow or fast, then adjust the fps. <br />
 
 &nbsp;&nbsp;
-	Key mappings:
-	* `a`: Running or holding a shell.
-	* `s`: Jumping.
-	* `d`: Shooting a fireball.
-
+  Key mappings:
+  * `a`: Running or holding a shell.
+  * `s`: Jumping.
+  * `d`: Shooting a fireball.
 
 2. Press **F12** to finish the gamplay.
 
