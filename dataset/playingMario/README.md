@@ -14,7 +14,14 @@ The Infinite Mario Bro. is originally written by Minecraft creator MarKus "Notch
   There are two parameters: `your_gameplay_id` and `your_fps`.
   * `your_gameplay_id`: id (or name) of gameplay. The outputs are distinguished with this value.
   * `your_fps`: controls the speed of gameplay. The default value of `your_fps` is 45 resulting in 22 fps in our environment.
-    If the speed of gamplay is too slow or fast, then adjust the fps.
+    If the speed of gamplay is too slow or fast, then adjust the fps. <br />
+
+&nbsp;&nbsp;
+	Key mappings:
+	* `a`: Running or holding a shell.
+	* `s`: Jumping.
+	* `d`: Shooting a fireball.
+
 
 2. Press **F12** to finish the gamplay.
 

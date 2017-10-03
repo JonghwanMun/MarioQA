@@ -32,10 +32,7 @@ public class EventLogs {
 	private boolean loadConfiguration;
 	private int fps;
 	private int margin;
-	private int numActions;
 	private int maxNumSamplingTrial = 300;
-	private String difficulty;
-	private String[] actionList;
 	private List<Integer> durations;
 
 	private String eventLogFilePath;
@@ -198,29 +195,18 @@ public class EventLogs {
 			System.exit(1);
 		}
 
-		JSONArray tmpArray = (JSONArray) conf.get("actionList");
-		this.actionList = new String[tmpArray.size()];
-		for (int i = 0; i < tmpArray.size(); i++) {
-			this.actionList[i] = (String) tmpArray.get(i);
-		}
 		tmpArray = (JSONArray) conf.get("durations");
 		this.durations = new ArrayList<Integer>();
 		for (int i = 0; i < tmpArray.size(); i++) {
 			this.durations.add(((Long) tmpArray.get(i)).intValue());
 		}
 		this.fps = ((Long) conf.get("fps")).intValue(); // frame per second
-		// number of actions
-		this.numActions = ((Long) conf.get("numActions")).intValue(); 
 		// the minimum distance between two same events for uniqueness check
 		this.margin = ((Long) conf.get("margin")).intValue(); 
-		this.difficulty = (String) conf.get("difficulty");
 
 		if (this.debugMode == this.DEBUGMODE_LEVEL2) {
 			System.out.println("fps: " + this.fps);
 			System.out.println("margin: " + this.margin);
-			System.out.println("difficulty: " + this.difficulty);
-			System.out.println("numActions: " + this.numActions);
-			System.out.println("actionList: " + this.actionList);
 			System.out.println("durations: " + this.durations);
 		}
 	}
