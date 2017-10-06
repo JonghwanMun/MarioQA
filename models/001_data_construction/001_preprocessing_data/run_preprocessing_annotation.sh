@@ -1,7 +1,8 @@
 #! /bin/bash
 
-annFolder=generated_annotations
+annFolder=data/generated_annotations
 if [ ! -d ${annFolder} ]; then
+	# if not generate QAs by yourself, we download the annotations
 	mkdir -p ${annFolder}		# doubly check if the folder exists
 	wget cvlab.postech.ac.kr/~jonghwan/MarioQA/filtered_annotations.tar.gz
 	mv filtered_annotations.tar.gz ${annFolder}/

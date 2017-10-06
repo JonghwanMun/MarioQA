@@ -3,6 +3,7 @@ import json
 import argparse
 from random import shuffle, seed
 import string
+
 # non-standard dependencies:
 import h5py
 import numpy as np
@@ -26,11 +27,11 @@ def convert_to_onehot(vector, num_classes=None) :
 def prepro_question(clips):
   
   # preprocess all the captions
-  # each clip contains information of video_path, begin_frame, end_frame, question, answer,
-  # clip_length, question_type 
+  # each clip contains information of video_path, begin_frame, end_frame, 
+  # question, answer, clip_length, question_type 
   print 'example processed tokens:'
   for i,clip in enumerate(clips):
-    txt = str(clip['question']).lower().translate(None, '?').strip().split() # delete punctuation
+    txt = str(clip['question']).lower().translate(None, '?').strip().split() 
     clip['processed_tokens'] = txt
     if i < 10 : print txt
 
@@ -53,9 +54,11 @@ def build_vocab(clips, params):
   bad_words = [w for w,n in counts.iteritems() if n <= count_thr]
   vocab = [w for w,n in counts.iteritems() if n > count_thr]
   bad_count = sum(counts[w] for w in bad_words)
-  print 'number of bad words: %d/%d = %.2f%%' % (len(bad_words), len(counts), len(bad_words)*100.0/len(counts))
+  print 'number of bad words: %d/%d = %.2f%%' \
+          % (len(bad_words), len(counts), len(bad_words)*100.0/len(counts))
   print 'number of words in vocab would be %d' % len(vocab)
-  print 'number of UNKs: %d/%d = %.2f%%' % (bad_count, total_words, bad_count*100.0/total_words)
+  print 'number of UNKs: %d/%d = %.2f%%' \
+          % (bad_count, total_words, bad_count*100.0/total_words)
 
   # lets look at the distribution of lengths as well
   sent_lengths = {}
@@ -71,7 +74,8 @@ def build_vocab(clips, params):
   print 'sentence length distribution (count, number of words):'
   sum_len = sum(sent_lengths.values())
   for i in xrange(max_len+1):
-    print '%2d: %10d   %f%%' % (i, sent_lengths.get(i,0), sent_lengths.get(i,0)*100.0/sum_len)
+    print '%2d: %10d   %f%%' \
+            % (i, sent_lengths.get(i,0), sent_lengths.get(i,0)*100.0/sum_len)
 
   # lets now produce the final annotations
   if bad_count > 0:
@@ -105,7 +109,8 @@ def assign_splits(clips, params):
       for clip in cur_clips:
         clip['split'] = split_mapping[clip['qa_id']]
 
-      print 'assigned %d to val, %d to test among %d clips for %s.' % (num_val, num_test, len(cur_clips), dt[ic])
+      print 'assigned %d to val, %d to test among %d clips for %s.' \
+              % (num_val, num_test, len(cur_clips), dt[ic])
       json.dump(cur_clips, open('data/origin_clip_info_%s.json'%dt[ic], 'w'))
       print 'wrote to data/origin_clip_info_%s.json' % dt[ic]
   else :
@@ -122,8 +127,9 @@ def assign_splits(clips, params):
         else:
           clip['split'] = 'train'
 
-      print 'assigned %d to val, %d to test among %d clips for %s.' % (num_val, num_test, len(cur_clips), dt[ic])
-      json.dump(out, open(params['output_json'] % dt[ic] , 'w'))
+      print 'assigned %d to val, %d to test among %d clips for %s.' \
+              % (num_val, num_test, len(cur_clips), dt[ic])
+      json.dump(cur_clips, open(params['output_json'] % dt[ic] , 'w'))
       print 'wrote to data/origin_clip_info_%s.json' % dt[ic]
 
   #return [clips[0], clips[0]+clips[1], clips[0]+clips[1]+clips[2]]
@@ -232,16 +238,24 @@ if __name__ == "__main__":
 
   # input json
   parser.add_argument('--input_json',
-                      default='data_release/filtered_annotations_%s.json', help='input json file to process into hdf5')
-  parser.add_argument('--output_json', default='data_release/clip_info_%s.json', help='output clip information of json file')
-  parser.add_argument('--output_h5', default='data_release/qa_labels_%s.h5', help='output QA labels of h5 file')
-  parser.add_argument('--slpit_file', default='data_release/split.txt', help='pre-defined split')
+                      default='data/generated_annotations/filtered_annotations_%s.json', 
+                      help='input json file to process into hdf5')
+  parser.add_argument('--output_json', default='data/clip_info_%s.json', 
+          help='output clip information of json file')
+  parser.add_argument('--output_h5', default='data/qa_labels_%s.h5', 
+          help='output QA labels of h5 file')
+  parser.add_argument('--slpit_file', default='data/split.txt', 
+          help='pre-defined split')
   
   # options
-  parser.add_argument('--max_length', default=50, type=int, help='max length of a question, in number of words. questions longer than this get clipped.')
-  parser.add_argument('--word_count_threshold', default=0, type=int, help='only words that occur more than this number of times will be put in vocab')
-  parser.add_argument('--num_val', default=0.2, type=float, help='number of images to assign to validation data (for CV etc)')
-  parser.add_argument('--num_test', default=0.2, type=float, help='number of test images (to withold until very very end)')
+  parser.add_argument('--max_length', default=50, type=int, 
+          help='max length of a question, in number of words. questions longer than this get clipped.')
+  parser.add_argument('--word_count_threshold', default=0, type=int, 
+          help='only words that occur more than this number of times will be put in vocab')
+  parser.add_argument('--num_val', default=0.2, type=float, 
+          help='number of images to assign to validation data (for CV etc)')
+  parser.add_argument('--num_test', default=0.2, type=float, 
+          help='number of test images (to withold until very very end)')
 
   args = parser.parse_args()
   params = vars(args) # convert to ordinary dict
