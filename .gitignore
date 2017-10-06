@@ -9,7 +9,7 @@
 .~*
 
 ###################################################################
-## Ignored folders
+## Ignored folders & files
 ###################################################################
 /eval.lua
 /train.lua
@@ -22,6 +22,9 @@ dataset/playingMario/src
 
 ## compiled results
 dataset/QAGeneration/target
+
+## deprecated file
+code/001_data_construction/001_preprocessing_data/preprocessing_frame.lua
 
 ## html folders
 
@@ -45,7 +48,7 @@ code/data/pretrained_models/skipthought/*.t7
 ###################################################################
 ## Ignored misc files
 ###################################################################
-## ipython notebook 
+## ipython notebook
 *.ipynb
 
 ## generated files while learning models (torch models, log, etc)

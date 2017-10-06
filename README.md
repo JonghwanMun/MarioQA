@@ -13,9 +13,9 @@ If you use this code in a publication, please cite our paper.
 ```
 
 ### Description
-  This repository consists of mainly two components: code and dataset.
+  This repository consists of mainly two components: models and dataset.
   + [**dataset**](dataset/README.md) for generating MarioQA dataset.
-  + [**code**](code/README.md) for models tested in our paper.
+  + [**models**](code/README.md) for models tested in our paper.
   
   Depending on your interest, move to the proper folder and follow the README.md file. 
 

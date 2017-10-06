@@ -1,5 +1,5 @@
 ## Generation of QAs
-After playing [Infinite Mario Bro.](JonghwanMun/MarioQA/tree/master/dataset/playingMario) and recording event logs, now we can generate QAs.
+After playing [Infinite Mario Bro.](../playingMario/README.md) and recording event logs, now we can generate QAs.
 
 
 ### Setup instructions
@@ -26,7 +26,19 @@ $ bash run_generation_QA.sh
   * `generated_annotations/filtered_annotations_ET.json`: Filtered out annotations with only ET questions.
   * `generated_annotations/filtered_annotations_HT.json`: Filtered out annotations with only HT questions.
   * `generated_annotations/filtered_annotations_ALL.json`: Filtered out annotations with all questions.
-  
++ Annotation include following informations
+  * `qa_id`: Question id
+  * `video_path`: The form is `gameplay_id/gameplay_id_%d.dat`
+  * `begin_frame`: The first frame number of video clip
+  * `end_frame`: The last frame number of video clip
+  * `clip_length`: The length of clip
+  * `question`: The question of clip
+  * `answer`: The answer of clip for the question
+  * `event`: The target event in question, e.g. `Kill`, `Eat`, `Hit`, etc
+  * `question_type`: The question type - `event-centric`, `counting`, `state`
+  * `interrogative`: The interrogative of question, e.g. `How`, `When`, `Who`, etc
+  * `temporal_relationship`: Difficulty of temporal relationship - `NT`, `ET`, `HT`
+  * `semantic_chunk`: Semantic chunk of qeustion, e.g. `Event-Centric-Kill-How-Arg1-RedKoopa-Reference-After-Kill-Arg1-GreenKoopaWing`. This is added since our ICCV 2017 paper, so sematic chunk is not included in MarioQA data used for ICCV 2017.
   
 ### Download the event log files (used in construction of MarioQA dataset)
 ```
