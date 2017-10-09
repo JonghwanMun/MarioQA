@@ -2,18 +2,15 @@ local npy4th = require 'npy4th'
 
 cmd = torch.CmdLine()
 cmd:text()
-cmd:text('save params for uni-GRU, bi-GRU, word embedding in torch file')
+cmd:text('save params for uni-GRU, word embedding in torch file')
 cmd:text()
 cmd:option('-porting_data_dir', './data/pretrained_models/skipthought/', 'data dir containing numpy files for skipthought params')
 cmd:option('-save_dir', './data/pretrained_models/skipthought/', 'directory to save torch files')
 cmd:option('-uni_gru_params_path', 'uni_gru_params.t7', 'path to save torch file of uni gru')
-cmd:option('-bi_gru_params_path', 'bi_gru_params.t7', 'path to save torch file of bi gru')
-cmd:option('-bi_gru_r_params_path', 'bi_gru_r_params.t7', 'path to save torch file of bi_r gru')
 cmd:option('-prefix', '', 'prefix for data type')
 
 -- parse input params
 opt = cmd:parse(arg or {})
-								--
 print('')
 print('read numpy data')
 print('')

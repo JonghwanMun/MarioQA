@@ -37,17 +37,13 @@ if __name__ == "__main__":
   print 'Loading model parameters ...'
   path_to_models = './data/pretrained_models/skipthought/paper_version/'
   path_to_umodel = path_to_models + 'uni_skip.npz'
-  path_to_bmodel = path_to_models + 'bi_skip.npz'
   print '   path_to_models: %s' % path_to_models
   print '   path_to_umodel: %s' % path_to_umodel
-  print '   path_to_bmodel: %s' % path_to_bmodel
   print ''
   
-  print 'read uni, bi model options'
+  print 'read uni model options'
   with open('%s.pkl'%path_to_umodel, 'rb') as f:
     uoptions = pkl.load(f)
-  with open('%s.pkl'%path_to_bmodel, 'rb') as f:
-    boptions = pkl.load(f)
   print 'done'
   print ''
   
@@ -55,13 +51,6 @@ if __name__ == "__main__":
   uparams = skipthoughts.init_params(uoptions)
   uparams = skipthoughts.load_params(path_to_umodel, uparams)
   print(uparams.keys())
-  print 'done'
-  print ''
-  
-  print 'init and load bparams'
-  bparams = skipthoughts.init_params_bi(boptions)
-  bparams = skipthoughts.load_params(path_to_bmodel, bparams)
-  print(bparams.keys())
   print 'done'
   print ''
   
@@ -75,15 +64,4 @@ if __name__ == "__main__":
   	 print '   saving [%s] ..' % save_path,
   	 numpy.save(save_path, uparams[k]) 
   	 print '  done'
-  print ''
-  
-  print 'save_bparams'
-  for k in bparams.keys():
-    save_path = porting_data_path + 'bparams_%s_%s.npy' % (k, params['prefix'])
-    print '   saving [%s] ..' % save_path,
-    numpy.save(save_path, bparams[k]) 
-    print '  done'
-  print ''
-  
-  print 'done'
   print ''
