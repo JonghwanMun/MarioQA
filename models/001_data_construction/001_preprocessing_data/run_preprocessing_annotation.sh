@@ -2,9 +2,9 @@
 
 annFolder=data/generated_annotations
 if [ ! -d ${annFolder} ]; then
-	# if not generate QAs by yourself, we download the annotations
+	# if you want to use MarioQA dataset, download the annotations
 	mkdir -p ${annFolder}		# doubly check if the folder exists
-	wget cvlab.postech.ac.kr/~jonghwan/MarioQA/filtered_annotations.tar.gz
+	wget cvlab.postech.ac.kr/~jonghwan/research/MarioQA/filtered_annotations.tar.gz
 	mv filtered_annotations.tar.gz ${annFolder}/
 	cd ${annFolder}
 	tar zxvf filtered_annotations.tar.gz
@@ -12,5 +12,5 @@ if [ ! -d ${annFolder} ]; then
 	cd ..
 fi
 
-stdbuf -oL python preprocessing_annotation_all.py 2>&1 \
-	| tee log_preprocessing_annotation_all.log
+stdbuf -oL python preprocessing_annotation.py 2>&1 \
+	| tee log_preprocessing_annotations.log
