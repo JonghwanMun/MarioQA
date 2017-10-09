@@ -95,7 +95,7 @@ def assign_splits(clips, params):
   
   dt = ['NT', 'ET', 'HT']
 
-  if 'split_file' in params.keys():
+  if 'split_file' in params.keys() and params['split_file'] != '':
     split_mapping = {}
     split_file = open(params['split_file'], 'r')
     while True:
@@ -242,13 +242,14 @@ if __name__ == "__main__":
 
   # input json
   parser.add_argument('--input_json',
-      default='data/generated_annotations/filtered_annotations_%s.json', 
+      default='data/generated_annotation/filtered_annotations_%s.json', 
       help='input json file to process into hdf5')
   parser.add_argument('--output_json', default='data/clip_info_%s.json',
       help='output clip information of json file')
   parser.add_argument('--output_h5', default='data/qa_labels_%s.h5',
       help='output QA labels of h5 file')
-  parser.add_argument('--slpit_file', default='data/split.txt',
+  #parser.add_argument('--split_file', default='data/split.txt',
+  parser.add_argument('--split_file', default='',
       help='pre-defined split')
   
   # options

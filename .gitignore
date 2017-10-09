@@ -8,6 +8,7 @@
 *.zip
 .~*
 
+
 ###################################################################
 ## Ignored folders & files
 ###################################################################
@@ -30,12 +31,12 @@ models/001_data_construction/001_preprocessing_data/preprocessing_frame.lua
 
 ## misc folders
 
+
 ###################################################################
 ## data (we get data by running shell script)
 ###################################################################
 
-## pretrained models (STV, vgg)
-code/data/pretrained_models/vgg16
+## pretrained models (STV)
 code/data/pretrained_models/skipthought/paper_version
 code/data/pretrained_models/skipthought/*.npy
 code/data/pretrained_models/skipthought/*.t7
@@ -44,6 +45,7 @@ code/data/pretrained_models/skipthought/*.t7
 *.jpg
 *.png
 *.dat
+
 
 ###################################################################
 ## Ignored misc files

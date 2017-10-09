@@ -24,7 +24,7 @@ def prepro(params):
     """ preprocessing the frames
     """
 
-    if !os.path.exists(params['out_dir']):
+    if not os.path.exists(params['out_dir']):
         os.mkdir(params['out_dir'])
 
     print("===> Loading annotation file from: " + params['ann_path'])
@@ -35,21 +35,20 @@ def prepro(params):
 
         bf = ann['begin_frame']
         ef = ann['end_frame']
-        frame_path = os.path.join(params['data_dir'], params['video_path'])
-        save_to = os.path.join(params['out_path'], params['video_path']).replace(".dat", ".png")
-        gameplay_path = os.path.join(params['data_dir'], params['video_path'].split('/')[0])
+        frame_path = os.path.join(params['data_dir'], ann['video_path'])
+        save_to = os.path.join(params['out_dir'], ann['video_path']).replace(".dat", ".png")
+        resized_dir = os.path.join(params['out_dir'], ann['video_path'].split('/')[0])
 
-        if !os.path.exists(gameplay_path):
-            os.mkdir(gameplay)
+        if not os.path.exists(resized_dir):
+            os.mkdir(resized_dir)
+            print("Create folder: " + resized_dir)
 
         for fr in range(bf, ef+1):
 
-            if !os.path.exists(frame_path % fr):
-                img = load_image_from_base64String(frame_path)
+            if not os.path.exists(save_to % fr):
+                img = load_image_from_base64String(frame_path % fr)
                 img = img.resize((params['width'], params['height']), Image.BICUBIC)
                 img.save(save_to % fr)
-            else:
-                print("Already preprocessed.")
 
 
 if __name__ == "__main__":
@@ -58,12 +57,13 @@ if __name__ == "__main__":
     # input json
     parser.add_argument('--data_dir', default='data/gameplay', 
             help='path to root directory of gameplay clips')
-    parser.add_argument('--ann_path', default='generated_annotations/filtered_anno_ALL.json', 
+    parser.add_argument('--ann_path',
+                        default='data/generated_annotation/filtered_annotations_ALL.json', 
             help='path to filtered annotations (All)')
     parser.add_argument('--out_dir', default='data/mario_resized_frames', 
             help='path to the directory for preprocessed clips')
-    parser.add_argument('--width', default=160, help='width of resized image')
-    parser.add_argument('--height', default=120, help='height of resized image')
+    parser.add_argument('--width', default=160, type=int, help='width of resized image')
+    parser.add_argument('--height', default=120, type=int, help='height of resized image')
 
     args = parser.parse_args()
     params = vars(args) # convert to ordinary dict

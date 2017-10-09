@@ -14,8 +14,8 @@ if [ ! -d ${clipFolder} ]; then
 fi
 
 # preprocessing that resizes the frames
-stdbuf -oL th preprocessing_frame.lua \
-	-data_path ${originFolder} \
-	-out_path ${clipFolder} \
-	-width ${width} -height ${height} 2>&1 \
+stdbuf -oL python preprocessing_frame.py \
+	--data_dir ${originFolder} \
+	--out_dir ${clipFolder} \
+	--width ${width} --height ${height} 2>&1 \
 	| tee log_mario_frame_preprocessing_resize${width}x${height}.log
