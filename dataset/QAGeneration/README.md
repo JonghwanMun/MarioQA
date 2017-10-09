@@ -40,7 +40,13 @@ $ bash run_generation_QA.sh
   * `temporal_relationship`: Difficulty of temporal relationship - `NT`, `ET`, `HT`
   * `semantic_chunk`: Semantic chunk of qeustion, e.g. `Event-Centric-Kill-How-Arg1-RedKoopa-Reference-After-Kill-Arg1-GreenKoopaWing`. This is added since our ICCV 2017 paper, so sematic chunk is not included in MarioQA data used for ICCV 2017.
   
+
 ### Download the event log files (used in construction of MarioQA dataset)
 ```
 $ bash run_download_event_logs.sh
+```
+
+### Download the filtered annotations used in paper 
+```
+$ bash run_download_filtered_annotation.sh
 ```
