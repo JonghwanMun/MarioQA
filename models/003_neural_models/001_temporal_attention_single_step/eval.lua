@@ -47,7 +47,7 @@ cmd:option('-clip_feat_dim',512,'dimension of the cnn feature from clip')
 cmd:option('-drop_prob', 0.5, 'strength of dropout')
 
 -- Evaluation/Checkpointing
-cmd:option('-val_clips_use', -1, 'how many images to use when periodically evaluating the validation loss? (-1 = all)')
+cmd:option('-test_clips_use', -1, 'how many images to use when periodically evaluating the validation loss? (-1 = all)')
 
 -- misc
 cmd:option('-img_root', 'data/mario_resized_frames/', 'path to clips which are composed of corresponding frames')
@@ -147,7 +147,7 @@ collectgarbage()
 -------------------------------------------------------------------------------
 local function eval_split(split, evalopt)
    local verbose = utils.getopt(evalopt, 'verbose', true)
-   local val_clips_use = utils.getopt(evalopt, 'val_clips_use', -1)
+   local test_clips_use = utils.getopt(evalopt, 'test_clips_use', -1)
 
    net.question_encoder:evaluate(); 
    net.c3d_net:evaluate()
@@ -194,7 +194,7 @@ local function eval_split(split, evalopt)
       -----------------------------------------------------------------------------
       -- if we wrapped around the split or used up val imgs budget then bail
       local ix0 = data.bounds.it_pos_now
-      local ix1 = math.min(data.bounds.it_max, val_clips_use)
+      local ix1 = math.min(data.bounds.it_max, test_clips_use)
       if verbose then
          local qst_label = torch.squeeze( data.questions[{ {},1 }] )
          local qst = ''
@@ -211,7 +211,7 @@ local function eval_split(split, evalopt)
    
       if loss_evals % 10 == 0 then collectgarbage() end
       if data.bounds.wrapped then break end -- the split ran out of data, lets break out
-      if val_clips_use >= 0 and n >= val_clips_use then break end -- we've used enough images
+      if test_clips_use >= 0 and n >= test_clips_use then break end -- we've used enough images
       print('-----------------------------------------------------------------------------------')
    end
    
@@ -224,7 +224,7 @@ end
 -- Main loop
 -------------------------------------------------------------------------------
 -- evaluate the validation performance
-local val_loss, val_acc, val_prediction, val_info = eval_split('test', {val_clips_use = opt.val_clips_use})
+local val_loss, val_acc, val_prediction, val_info = eval_split('test', {test_clips_use = opt.test_clips_use})
 print('==========================================================')
 print('=====> loss: ', val_loss)
 print('=====> accuracy: ', val_acc)

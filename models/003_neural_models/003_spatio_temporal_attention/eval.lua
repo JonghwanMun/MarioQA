@@ -146,7 +146,7 @@ collectgarbage()
 local function eval_split(split, evalopt)
    local verbose = utils.getopt(evalopt, 'verbose', true)
    local test_clips_use = utils.getopt(evalopt, 'test_clips_use', -1)
-   net.question_encoder:evaluate(); 
+   net.question_encoder:evaluate();
    net.c3d_net:evaluate()
    net.att:evaluate()
    net.classify:evaluate()

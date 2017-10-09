@@ -26,7 +26,7 @@ def convert_to_onehot(vector, num_classes=None) :
 
 def prepro_question(clips):
   
-  # preprocess all the captions
+  # preprocess all the questions
   # each clip contains information of video_path, begin_frame, end_frame, 
   # question, answer, clip_length, question_type 
   print 'example processed tokens:'
@@ -35,7 +35,7 @@ def prepro_question(clips):
     clip['processed_tokens'] = txt
     if i < 10 : print txt
 
-def build_vocab(clips, params):
+def build_vocab_question(clips, params):
   count_thr = params['word_count_threshold']
 
   # count up the number of words
@@ -109,10 +109,8 @@ def assign_splits(clips, params):
       for clip in cur_clips:
         clip['split'] = split_mapping[clip['qa_id']]
 
-      print 'assigned %d to val, %d to test among %d clips for %s.' \
+      print 'assigned %d to val, %d to test among %d clips for %s using split file.' \
               % (num_val, num_test, len(cur_clips), dt[ic])
-      json.dump(cur_clips, open('data/origin_clip_info_%s.json'%dt[ic], 'w'))
-      print 'wrote to data/origin_clip_info_%s.json' % dt[ic]
   else :
     for ic in range(3) :
       cur_clips = clips[ic]
@@ -129,8 +127,6 @@ def assign_splits(clips, params):
 
       print 'assigned %d to val, %d to test among %d clips for %s.' \
               % (num_val, num_test, len(cur_clips), dt[ic])
-      json.dump(cur_clips, open(params['output_json'] % dt[ic] , 'w'))
-      print 'wrote to data/origin_clip_info_%s.json' % dt[ic]
 
   #return [clips[0], clips[0]+clips[1], clips[0]+clips[1]+clips[2]]
   return clips
@@ -152,7 +148,7 @@ def encode_questions(clips, params, wtoi):
     Qi = np.zeros((1, max_length), dtype='uint32')
     s = clip['final_question']
     question_length[i] = min(max_length, len(s)) # record the length of this sequence
-    for k,w in enumerate(s):  # k is index of words in caption
+    for k,w in enumerate(s):  # k is index of words in question
       if k < max_length:
         Qi[0,k] = wtoi[w]
 
@@ -169,10 +165,43 @@ def encode_questions(clips, params, wtoi):
 
   A = convert_to_onehot(answer_labels)
   assert Q.shape[0] == M, 'lengths don\'t match? that\'s weird'
-  assert np.all(question_length > 0), 'error: some caption had no words?'
+  assert np.all(question_length > 0), 'error: some questions had no words?'
 
   print 'encoded questions to array of size ', `Q.shape`
   return A, Q, question_length, itoa, atoi
+
+def prepro_annotations(params, anns, wtoi, itow, prefix):
+  # encode questions in large arrays, ready to ship to hdf5 file
+  A, Q, question_length, itoa, atoi = encode_questions(anns, params, wtoi)
+
+  # create output h5 file
+  f = h5py.File(params['output_h5'] % (prefix), "w")
+  f.create_dataset("answers", dtype='uint32', data=A)
+  f.create_dataset("questions", dtype='uint32', data=Q)
+  f.create_dataset("question_length", dtype='uint32', data=question_length)
+
+  f.close()
+  print 'wrote ', params['output_h5'] % (prefix)
+
+  # create output json file
+  out = {}
+  out['ix_to_ans'] = itoa
+  out['ans_to_ix'] = atoi
+  out['ix_to_word'] = itow
+  out['word_to_ix'] = wtoi
+  out['clips'] = []
+
+  key_list = ['video_path', 'begin_frame', 'end_frame', \
+          'question', 'answer', 'qa_id', 'clip_length']
+  for i,clip in enumerate(anns):
+    jclip = {}
+    jclip['split'] = clip['split']
+    for k in key_list : jclip[k] = clip[k]
+    
+    out['clips'].append(jclip)
+  
+  json.dump(out, open(params['output_json'] % (prefix) , 'w'))
+  print 'wrote ', params['output_json'] % (prefix)
 
 def main(params):
 
@@ -190,47 +219,22 @@ def main(params):
   cases = [clips[0], clips[0]+clips[1], clips[0]+clips[1]+clips[2]]
   
   """ obtain vocabulary
-  Note: we construct vocabulary using case 3 (NoTemp + EasyTemp + HardTemp)
-  for convenient evaluation between each others.
+  Note: we construct vocabulary using case 3 (NT + ET + HT)
+  for convenient evaluation on NT, ET and HT.
   """
-  vocab = build_vocab(cases[2], params)
+  vocab = build_vocab_question(cases[2], params)
   itow = {i+1:w for i,w in enumerate(vocab)} # a 1-indexed vocab translation table
   wtoi = {w:i+1 for i,w in enumerate(vocab)} # inverse table
   wtoi['<EOS>'] = 0
   itow['0'] = '<EOS>'
 
+  # Pre-processing annotations in case 1, 2, 3
   for idt in range(3) :
-    # encode captions in large arrays, ready to ship to hdf5 file
-    A, Q, question_length, itoa, atoi = encode_questions(cases[idt], params, wtoi)
-  
-    # create output h5 file
-    f = h5py.File(params['output_h5'] % ('case'+str(idt+1)), "w")
-    f.create_dataset("answers", dtype='uint32', data=A)
-    f.create_dataset("questions", dtype='uint32', data=Q)
-    f.create_dataset("question_length", dtype='uint32', data=question_length)
-  
-    f.close()
-    print 'wrote ', params['output_h5'] % ('case'+str(idt+1))
-  
-    # create output json file
-    out = {}
-    out['ix_to_ans'] = itoa
-    out['ans_to_ix'] = atoi
-    out['ix_to_word'] = itow
-    out['word_to_ix'] = wtoi
-    out['clips'] = []
+    prepro_annotations(params, cases[idt], wtoi, itow, 'case'+str(idt+1))
 
-    key_list = ['video_path', 'begin_frame', 'end_frame', 'question', 'answer',
-                'qa_id', 'clip_length']
-    for i,clip in enumerate(cases[idt]):
-      jclip = {}
-      jclip['split'] = clip['split']
-      for k in key_list : jclip[k] = clip[k]
-      
-      out['clips'].append(jclip)
-    
-    json.dump(out, open(params['output_json'] % ('case'+str(idt+1)) , 'w'))
-    print 'wrote ', params['output_json'] % ('case'+str(idt+1))
+  # Pre-processing NT, ET and HT annotations
+  for idt in range(3) :
+    prepro_annotations(params, clips[idt], wtoi, itow, dt[idt])
 
 if __name__ == "__main__":
 
@@ -238,24 +242,24 @@ if __name__ == "__main__":
 
   # input json
   parser.add_argument('--input_json',
-                      default='data/generated_annotations/filtered_annotations_%s.json', 
-                      help='input json file to process into hdf5')
+      default='data/generated_annotations/filtered_annotations_%s.json', 
+      help='input json file to process into hdf5')
   parser.add_argument('--output_json', default='data/clip_info_%s.json', 
-          help='output clip information of json file')
+      help='output clip information of json file')
   parser.add_argument('--output_h5', default='data/qa_labels_%s.h5', 
-          help='output QA labels of h5 file')
+      help='output QA labels of h5 file')
   parser.add_argument('--slpit_file', default='data/split.txt', 
-          help='pre-defined split')
+      help='pre-defined split')
   
   # options
   parser.add_argument('--max_length', default=50, type=int, 
-          help='max length of a question, in number of words. questions longer than this get clipped.')
+      help='max length of a question, in number of words. questions longer than this get clipped.')
   parser.add_argument('--word_count_threshold', default=0, type=int, 
-          help='only words that occur more than this number of times will be put in vocab')
+      help='only words that occur more than this number of times will be put in vocab')
   parser.add_argument('--num_val', default=0.2, type=float, 
-          help='number of images to assign to validation data (for CV etc)')
+      help='number of images to assign to validation data (for CV etc)')
   parser.add_argument('--num_test', default=0.2, type=float, 
-          help='number of test images (to withold until very very end)')
+      help='number of test images (to withold until very very end)')
 
   args = parser.parse_args()
   params = vars(args) # convert to ordinary dict
