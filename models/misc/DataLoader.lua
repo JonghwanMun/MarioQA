@@ -224,15 +224,38 @@ function DataLoader:getBatch(opt)
 			info_struct.begin_frame = self.clips[ix].begin_frame
 			info_struct.end_frame   = self.clips[ix].end_frame
 			info_struct.clip_length = self.clips[ix].clip_length
-			info_struct.question    = net_utils.decode_question(self.ix_to_word, tmp_qst, tmp_q_len) .. '?'
-			info_struct.answer      = net_utils.decode_answer(self.ix_to_ans, tmp_ans)
-			info_struct.event       = self.clips[ix].event
-			info_struct.inte        = self.clips[ix].inte
-			info_struct.difficult   = self.clips[ix].difficult
-			info_struct.question_type = self.clips[ix].question_type
-			info_struct.temporal_relationship = self.clips[ix].temporal_relationship
+			info_struct.question    = self.clips[ix].question
+			info_struct.answer      = self.clips[ix].answer
 		end
-		table.insert(infos, info_struct) end
+		table.insert(infos, info_struct) 
+	end
+
+	-- mapping the answer with vocabulary used in training time
+	if split == 'test' then
+		-- In test time, we set the ix_to_ans as ix_to_ans used in training time (in eval.lua)
+		if self.ans_to_ix_in_train == nil then
+			self.ans_to_ix_in_train = {}
+			for k, v in pairs(self.ix_to_ans) do
+				self.ans_to_ix_in_train[v] = k
+			end
+			print(self.ans_to_ix_in_train)
+		end
+		if self.ix_to_ans_in_test == nil then
+			self.ix_to_ans_in_test = {}
+			for k, v in pairs(self.ans_to_ix) do
+				self.ix_to_ans_in_test[v] = k
+			end
+			print(self.ix_to_ans_in_test)
+		end
+
+		for ib=1,batch_size do
+			print(ans_batch[ib])
+			local ans_string = self.ix_to_ans_in_test[ans_batch[ib]-1]
+			print(ans_string)
+			local ans_idx = self.ans_to_ix_in_train[ans_string]
+			ans_batch[{ib}] = ans_idx + 1
+		end
+	end
 
 	if gpu_use then
 		if self.load_clip then
