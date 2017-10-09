@@ -195,7 +195,7 @@ public class EventLogs {
 			System.exit(1);
 		}
 
-		tmpArray = (JSONArray) conf.get("durations");
+		JSONArray tmpArray = (JSONArray) conf.get("durations");
 		this.durations = new ArrayList<Integer>();
 		for (int i = 0; i < tmpArray.size(); i++) {
 			this.durations.add(((Long) tmpArray.get(i)).intValue());
