@@ -56,7 +56,7 @@ cmd:option('-learning_rate_decay_every', 3, 'every how many iterations thereafte
 cmd:option('-lr_decay_rate', 0.8, 'every how many iterations thereafter to drop LR by half?')
 
 -- Evaluation/Checkpointing
-cmd:option('-val_images_use', -1, 'how many images to use when periodically evaluating the validation loss? (-1 = all)')
+cmd:option('-val_images_use', 500, 'how many images to use when periodically evaluating the validation loss? (-1 = all)')
 cmd:option('-checkpoint_path', './model/', 'folder to save checkpoints into (empty = this folder)')
 cmd:option('-losses_log_every', 10, 'How often do we snapshot losses, for inclusion in the progress dump? (0 = disable)')
 
@@ -99,7 +99,7 @@ local loader = DataLoader{clip_info_file=opt.clip_info_file, qa_label_file=opt.q
 -------------------------------------------------------------------------------
 local net = {}
 local kk = 10
-local iter = 0
+local iter = 1
 local epoch = 1
 local train_acc = 0
 local timer = torch.Timer()
@@ -307,8 +307,8 @@ local function lossFun()
       batch_loss = batch_loss + loss
       forward_time = forward_time + timer:time().real - st
 
-      local max_score, pred_ans = torch.max(pred:cuda(), 2)
-      train_acc = train_acc + torch.eq(pred_ans[1]:cuda(), data.answers[{ {bi} }]:cuda()):sum()
+      local max_score, pred_ans = torch.max(pred:squeeze(), 1)
+      train_acc = train_acc + torch.eq(pred_ans:cuda(), data.answers[{ {bi} }]):sum()
 
       if iter%100 == 0 then
          local qst_label = torch.squeeze( data.questions[{ {},bi }] )
