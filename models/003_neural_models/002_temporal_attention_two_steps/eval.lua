@@ -8,7 +8,7 @@ require 'loadcaffe'
 require 'image'
 
 -- local imports
-local tATT = require 'layers.temporalAttentionNetwork'
+require 'layers.temporalAttentionNetwork'
 require 'layers.sentenceEncoder'
 require 'misc.DataLoader'
 local utils = require 'misc.utils'
