@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.apache.commons.cli.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -44,6 +46,7 @@ public class QApairsGeneration {
 
 		/* Obtain options from command line */
 		String logListPath = cmd.getOptionValue("l");
+		String outputPath = cmd.getOptionValue("o");
 		String configPath = cmd.getOptionValue("c");
 		String qstTemplatePath = cmd.getOptionValue("q");
 		String phrasePath = cmd.getOptionValue("p");
@@ -55,7 +58,7 @@ public class QApairsGeneration {
 			String logFile;
 			
 			while ((logFile= br.readLine()) != null) {
-				System.out.println("=> Start generating QAs for " + logFile);
+				System.out.println("====> Start generating QAs for " + logFile);
 				EventLogs eventLogs = new EventLogs(logFile, configPath, qstTemplatePath, phrasePath, debugMode);
 				JSONArray qas;
 				JSONArray curQAs = new JSONArray();
@@ -102,9 +105,10 @@ public class QApairsGeneration {
 					curQAs.add(qas.get(i));
 				}
 
-				generatedQAs = filteringQAs(generatedQAs, false);
+				generatedQAs = filteringQAs(generatedQAs, outputPath, false);
 
-				String saveTo = String.format("generated_annotation/%s_raw_annotations.json", eventLogs.getVideoFile());
+				Path savePath = Paths.get(outputPath, "%s_raw_annotations.json");
+				String saveTo = String.format(savePath.toString(), eventLogs.getVideoFile());
 				writeJSONFile(curQAs, saveTo);
 				System.out.println(String.format("====> Generated QAs (%d) for %s are saved in %s (# of filtered: %d)",
 						curQAs.size(), eventLogs.getVideoFile(), saveTo, generatedQAs.size()));
@@ -115,7 +119,7 @@ public class QApairsGeneration {
 			e.printStackTrace();
 		}
 		
-		generatedQAs = filteringQAs(generatedQAs, true);
+		generatedQAs = filteringQAs(generatedQAs, outputPath, true);
 	}
 	
 	private static void addCmdOptions() {
@@ -123,6 +127,10 @@ public class QApairsGeneration {
 		Option llp = new Option("l", "logListPath", true, "path to log of events in Mario gameplay");
 		llp.setRequired(true);
 		options.addOption(llp);
+
+		Option out = new Option("o", "outputPath", true, "path to output json files");
+		out.setRequired(true);
+		options.addOption(out);
 
 		Option conf = new Option("c", "confFile", true, "path to configuration file");
 		conf.setRequired(true);
@@ -168,7 +176,7 @@ public class QApairsGeneration {
 		System.out.println(String.format("%s : %s", "debugMode      ", dm));
 	}
 	
-	public static JSONArray filteringQAs(JSONArray anns, boolean lastTime) {
+	public static JSONArray filteringQAs(JSONArray anns, String outputPath, boolean lastTime) {
 
 		// Initialize variables
 		int numDataType = dataType.length;
@@ -193,7 +201,7 @@ public class QApairsGeneration {
 
 		// print the number of QAs before being filtered out
 		if (lastTime) {
-			System.out.println("\n********************************************************");
+			System.out.println("\n************************************************************************");
 			for (int idt = 0; idt < numDataType; idt++) {
 				System.out.println(String.format("# of raw QAs with %s: %d", dataType[idt],
 						annMap.get(dataType[idt]).size()));
@@ -209,7 +217,7 @@ public class QApairsGeneration {
 		JSONArray allJson = new JSONArray();
 		Map<String, Integer> allQAPairCount = new HashMap<String, Integer>();
 		for (int idt=0; idt<numDataType; idt++) {
-			if (lastTime) System.out.println("********************************************************");
+			if (lastTime) System.out.println("************************************************************************");
 			System.out.print(String.format(
 					"=> Filtering out for %s ... ", dataType[idt]));
 			Map<String, JSONArray> annListForEachQAPair= new HashMap<String, JSONArray>();
@@ -259,18 +267,19 @@ public class QApairsGeneration {
 			
 			System.out.println("done");
 			if (lastTime) {
+
+
 				// write information
 				numQAs[idt] = outJson.size();
-				writeJSONFile(outJson, String.format(
-						"generated_annotation/filtered_annotations_%s.json", dataType[idt]));
+				Path savePath = Paths.get(outputPath, "filtered_annotations_%s.json");
+				writeJSONFile(outJson, String.format(savePath.toString(), dataType[idt]));
 				System.out.println("==> Theshold: " + String.valueOf(threshold[idt]));
 				System.out.println(String.format(
-						"===> %s saved in generated_annotation/filtered_annotations_%s.json",
-						dataType[idt], dataType[idt]));
+						"===> %s saved in " + savePath, dataType[idt], dataType[idt]));
 			}
 		}
 		if (lastTime) {
-			System.out.println("********************************************************");
+			System.out.println("************************************************************************");
 			String[] keyList = allQAPairCount.keySet()
 					.toArray(new String[allQAPairCount.keySet().size()]);
 			System.out.println(String.format("# of unique QA pairs: %d", keyList.length));
@@ -281,9 +290,9 @@ public class QApairsGeneration {
 						String.format("# of filtered QAs with %s: %d", dataType[idt], numQAs[idt]));
 			}
 			System.out.println(String.format("# of filtered all QAs: %d", numQAs[numDataType]));
-			writeJSONFile(allJson, "generated_annotation/filtered_annotations_ALL.json");
-			System.out.println("ALL saved in generated_annotation/filtered_annotations_ALL.json");
-			System.out.println("********************************************************");
+			writeJSONFile(allJson, Paths.get(outputPath, "filtered_annotations_ALL.json").toString());
+			System.out.println("ALL saved in " + Paths.get(outputPath, "filtered_annotations_ALL.json").toString());
+			System.out.println("************************************************************************");
 		}
 		return allJson;
 	}

@@ -96,7 +96,7 @@ public class EventLogs {
 		// initialize variables for the event log
 		numEvents = logList.size();
 		numFrames = ((Long) ((JSONObject) logList.get(numEvents - 1)).get("frame")).intValue();
-		System.out.println(String.format("==> # of events (%d)  | # of frames (%d)", numEvents, numFrames));
+		System.out.println(String.format("=> # of events (%d)  | # of frames (%d)", numEvents, numFrames));
 
 		frame = new int[numEvents];
 		marioState = new String[numFrames + 1];

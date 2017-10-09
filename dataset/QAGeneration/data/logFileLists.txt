@@ -1,2 +1,0 @@
-event_logs/play1.json
-event_logs/play2.json
