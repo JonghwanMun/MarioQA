@@ -443,10 +443,6 @@ while true do
       local frac = (epoch - opt.learning_rate_decay_start) / opt.learning_rate_decay_every
       local decay_factor = math.pow(opt.lr_decay_rate, frac)
       learning_rate = learning_rate * decay_factor -- set the decayed rate
-
-      if opt.cnn_finetune_after >= 0 and epoch > opt.cnn_finetune_after then
-         cnn_learning_rate = cnn_learning_rate * decay_factor
-      end
    end
    print(string.format('Loss : %.2f\t | lr : %.5f\t', losses.total_loss, learning_rate))
 
