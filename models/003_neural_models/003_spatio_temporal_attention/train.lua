@@ -457,7 +457,7 @@ while true do
 
    -----------------------------------------------------------------------------
    -- save checkpoint at every epoch (or on final iteration)
-   if  iter % every_epoch == 0 or iter == opt.max_epoch*every_epoch then
+   if  iter % 500 == 0 or iter % every_epoch == 0 or iter == opt.max_epoch*every_epoch then
       -- evaluate the validation performance
       local val_loss, val_acc, val_prediction = eval_split('val', {val_clips_use = opt.val_clips_use})
       table.insert(predictions_history, val_prediction)
@@ -483,7 +483,7 @@ while true do
       local save_net = {}
       save_net.question_encoder = thin_qe
       save_net.c3d_net          = thin_c3d
-      save_net.att				  = thin_att
+      save_net.att				= thin_att
       save_net.classify         = thin_cls
       checkpoint.net = save_net
       -- also include the vocabulary mapping so that we can use the checkpoint 

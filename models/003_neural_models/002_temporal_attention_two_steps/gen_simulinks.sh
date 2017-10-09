@@ -2,4 +2,3 @@
 ln -s ../../misc
 ln -s ../../layers
 ln -s ../../data
-mkdir model

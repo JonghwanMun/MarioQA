@@ -7,7 +7,7 @@ require 'math'
 require 'image'
 
 -- local imports
-local tATT = require 'layers.temporalAttentionNetwork'
+require 'layers.temporalAttentionNetwork'
 require 'layers.sentenceEncoder'
 require 'misc.DataLoader'
 local utils = require 'misc.utils'
@@ -174,7 +174,7 @@ else -- create net from scratch
    taOpt.emb_dim = opt.clip_feat_dim
    taOpt.height = 7
    taOpt.width = 10
-   net.att = nn.tATT(taOpt)
+   net.att = nn.temporalAttentionNetwork(taOpt)
 
    -- attatch classification layer
    net.classify = nn.Sequential()

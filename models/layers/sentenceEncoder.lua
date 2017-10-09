@@ -24,7 +24,7 @@ function layer:__init(uparams, utables, opt)
   self.lookup_table = nn.LookupTable(self.vocab_size + 1, self.word_dim)
   print(self.lookup_table.weight:size())
   print(utables:size())
-  self.lookup_table.weight:copy(utables)
+  self.lookup_table.weight[{{1,self.vocab_size},{}}]:copy(utables)
   self:_createInitState(1) -- will be lazily resized later during forward passes
 
 	print('\n----------Sentence Encoder initialized as follows:')
@@ -170,8 +170,8 @@ function layer:updateGradInput(input, gradOutput)
       doutput:copy(dstate[t+1])
       if t >= min_len then
          for k = 1, batch_size do
-            if label_length[k] == t then 
-               doutput[k] = gradOutput[k] 
+            if label_length[k] == t then
+               doutput[k] = gradOutput[k]
             end
          end
       end

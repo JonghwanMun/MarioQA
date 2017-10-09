@@ -5,4 +5,10 @@ if [ ! -d ./model_${dt} ]; then
    mkdir -p ./model_${dt}
 fi
 
-stdbuf -oL th train.lua -start_from model_EasyTemp/model_id10.t7 -clip_info_file data/clip_info_${dt}.json -qa_label_file data/qa_labels_${dt}.h5 -uni_gru_path data/pretrained_models/skipthought/uni_gru_params_${dt}.t7 -uni_gru_word2vec_path data/pretrained_models/skipthought/videoqa_uni_gru_word2vec_${dt}.t7 -batch_size 16 -gpuid 1 -checkpoint_path model_${dt} 2>&1 | tee log_train_${dt}.log
+stdbuf -oL th train.lua \
+	-clip_info_file data/clip_info_${dt}.json \
+	-qa_label_file data/qa_labels_${dt}.h5 \
+	-uni_gru_path data/pretrained_models/skipthought/uni_gru_params_${dt}.t7 \
+	-uni_gru_word2vec_path data/pretrained_models/skipthought/videoqa_uni_gru_word2vec_${dt}.t7 \
+	-batch_size 16 -gpuid 1 \
+	-checkpoint_path model_${dt} 2>&1 | tee log_train_${dt}.log

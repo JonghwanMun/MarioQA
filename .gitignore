@@ -37,11 +37,12 @@ models/001_data_construction/001_preprocessing_data/preprocessing_frame.lua
 ###################################################################
 
 ## pretrained models (STV)
-code/data/pretrained_models/skipthought/paper_version
-code/data/pretrained_models/skipthought/*.npy
-code/data/pretrained_models/skipthought/*.t7
+models/data/pretrained_models/skipthought/paper_version
+models/data/pretrained_models/skipthought/*.npy
+models/data/pretrained_models/skipthought/*.t7
 
 ## all images and data
+models/data/mario_resized_frames
 *.jpg
 *.png
 *.dat

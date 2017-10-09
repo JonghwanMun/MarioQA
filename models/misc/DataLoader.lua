@@ -175,8 +175,9 @@ function DataLoader:getBatch(opt)
 				for fi=1,self.num_frame do
 					table.insert(frame_idx, math.floor(fIdx))
 					-- from raw image
-					local frame_path = self.data_path .. self.clips[ix].video_path 
-							.. '/' .. self.clips[ix].video_path .. '_' .. tostring(math.floor(fIdx)) .. '.png'
+					local frame_path = string.gsub(
+							string.format(self.data_path .. self.clips[ix].video_path, math.floor(fIdx)),
+							'.dat', '.png')
 					local frame = image.load(frame_path):float() -- (3,120,160)
 					frame:mul(255.0)
 					frame:add(-1, self.vgg_mean)
@@ -192,8 +193,9 @@ function DataLoader:getBatch(opt)
 				for fi=1,num_frame do
 					table.insert(frame_idx, math.floor(fIdx))
 					-- from raw image
-					local frame_path = self.data_path .. self.clips[ix].video_path .. '/' 
-							.. self.clips[ix].video_path .. '_' .. tostring(math.floor(fIdx)) .. '.png'
+					local frame_path = string.gsub(
+							string.format(self.data_path .. self.clips[ix].video_path, math.floor(fIdx)),
+							'.dat', '.png')
 					local frame = image.load(frame_path):float() -- (3,120,160)
 					frame:mul(255.0)
 					frame:add(-1, self.vgg_mean)
@@ -230,8 +232,7 @@ function DataLoader:getBatch(opt)
 			info_struct.question_type = self.clips[ix].question_type
 			info_struct.temporal_relationship = self.clips[ix].temporal_relationship
 		end
-		table.insert(infos, info_struct)
-	end
+		table.insert(infos, info_struct) end
 
 	if gpu_use then
 		if self.load_clip then
