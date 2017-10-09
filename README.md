@@ -15,13 +15,13 @@ If you use this code in a publication, please cite our paper.
 ### Description
   This repository consists of mainly two components: models and dataset.
   + [**dataset**](dataset/README.md) for generating MarioQA dataset.
-  + [**models**](code/README.md) for models tested in our paper.
+  + [**models**](models/README.md) for models tested in our paper.
   
   Depending on your interest, move to the proper folder and follow the README.md file. 
 
 ### Do you want to know more details or to download the MarioQA dataset?
   + [**arXiv preprint**](https://arxiv.org/abs/1612.01669) for details.
-  + Follow the instruction in [**Download MarioQA**]().
+  + Follow the dataset download instruction in [**Project Page**](https://cvlab.postech.ac.kr/research/marioQA).
   
 
 ### Licence
