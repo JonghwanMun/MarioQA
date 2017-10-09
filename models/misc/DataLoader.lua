@@ -238,20 +238,16 @@ function DataLoader:getBatch(opt)
 			for k, v in pairs(self.ix_to_ans) do
 				self.ans_to_ix_in_train[v] = k
 			end
-			print(self.ans_to_ix_in_train)
 		end
 		if self.ix_to_ans_in_test == nil then
 			self.ix_to_ans_in_test = {}
 			for k, v in pairs(self.ans_to_ix) do
 				self.ix_to_ans_in_test[v] = k
 			end
-			print(self.ix_to_ans_in_test)
 		end
 
 		for ib=1,batch_size do
-			print(ans_batch[ib])
 			local ans_string = self.ix_to_ans_in_test[ans_batch[ib]-1]
-			print(ans_string)
 			local ans_idx = self.ans_to_ix_in_train[ans_string]
 			ans_batch[{ib}] = ans_idx + 1
 		end
