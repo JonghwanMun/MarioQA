@@ -126,8 +126,8 @@ public class EventLogs {
 
 			// Extract the event information
 			frame[i] = ((Long) curLog.get("frame")).intValue();
-			curMario = (String) curLog.get("marioState");
-			curScene = (String) curLog.get("sceneState");
+			curMario = ((String) curLog.get("marioState")).toLowerCase();
+			curScene = ((String) curLog.get("sceneState")).toLowerCase();
 			marioLocation[i] = (String) curLog.get("marioLocation");
 			spriteLocation[i] = (String) curLog.get("spriteLocation");
 			action[i] = (String) curLog.get("action");
