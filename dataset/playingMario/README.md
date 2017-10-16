@@ -46,7 +46,7 @@ Each event include following information:
   * `means`: the mean of event
 
 ### Download the clips of MarioQA dataset
-Please follow the instruction in [project page](http://cvlab.postech.ac.kr/research/marioQA)
+Please follow the instruction in [project page](http://cvlab.postech.ac.kr/research/MarioQA)
 
 ### LICENSE      
 
