@@ -21,7 +21,7 @@ If you use this code in a publication, please cite our paper.
 
 ### Do you want to know more details or to download the MarioQA dataset?
   + [**arXiv preprint**](https://arxiv.org/abs/1612.01669) for details.
-  + Follow the dataset download instruction in [**Project Page**](https://cvlab.postech.ac.kr/research/marioQA).
+  + Follow the dataset download instruction in [**Project Page**](https://cvlab.postech.ac.kr/research/MarioQA).
   
 
 ### Licence
