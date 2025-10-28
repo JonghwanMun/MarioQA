@@ -6,7 +6,7 @@ if [ ! -d ./data/generated_annotation ]; then
 fi
 
 cd ./data/generated_annotation
-wget http://cvlab.postech.ac.kr/~jonghwan/research/MarioQA/filtered_annotations.tar.gz
+wget http://cvlab.postech.ac.kr//research/MarioQA/data/filtered_annotations.tar.gz
 tar xzvf filtered_annotations.tar.gz
 rm filtered_annotations.tar.gz
 cd ../..
