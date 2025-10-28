@@ -6,7 +6,7 @@ if [ ! -d ./event_logs ]; then
 fi
 
 cd event_logs
-wget http://cvlab.postech.ac.kr/~jonghwan/research/MarioQA/eventLogFiles.tar.gz
+wget http://cvlab.postech.ac.kr/research/MarioQA/data/eventLogFiles.tar.gz
 tar xzvf eventLogFiles.tar.gz
 rm eventLogFiles.tar.gz
 cd ..
